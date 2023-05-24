@@ -1,0 +1,60 @@
+fun main() {
+    print("Введите количество строк: ")
+    val rows = readLine()?.toIntOrNull()
+
+    print("Введите количество столбцов: ")
+    val columns = readLine()?.toIntOrNull()
+
+    if (rows == null || columns == null) {
+        println("Неверные входные данные")
+        return
+    }
+
+    val matrix = Array(rows) { IntArray(columns) }
+
+    println("Введите трехзначные числа, разделяя элементы в строке пробелом:")
+
+    for (i in 0 until rows) {
+        val input = readLine()?.trim()?.split(" ") ?: emptyList()
+        val row = input.mapNotNull { it.toIntOrNull() }.toIntArray()
+
+        if (row.size != columns) {
+            println("Неверное количество чисел в строке")
+            return
+        }
+
+        matrix[i] = row
+    }
+
+    val digitSet = mutableSetOf<Int>()
+
+    for (row in matrix) {
+        for (num in row) {
+            val digits = getDigits(num)
+            digitSet.addAll(digits)
+        }
+    }
+
+    println("Двумерный массив:")
+    for (row in matrix) {
+        for (num in row) {
+            print("$num\t")
+        }
+        println()
+    }
+
+    println("В массиве использовано ${digitSet.size} различных цифр")
+}
+
+fun getDigits(num: Int): Set<Int> {
+    val digits = mutableSetOf<Int>()
+
+    var n = num
+    while (n != 0) {
+        val digit = n % 10
+        digits.add(digit)
+        n /= 10
+    }
+
+    return digits
+}
