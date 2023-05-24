@@ -1,0 +1,63 @@
+fun main() {
+    val alphabet = listOf(
+        'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
+        'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
+    )
+    val shifts = listOf(
+        1, 2, 20, 21, 5, 22, 23, 24, 8, 9, 10, 11, 32, 16, 17, 18, 19, 9, 30, 31, 12, 13, 14,
+        25, 26, 6, 7, 27, 28, 23, 4, 15, 33
+    )
+
+    println("Шифровка (1) или расшифровка (2)?")
+    val choice = readLine()?.toIntOrNull()
+
+    when (choice) {
+        1 -> {
+            println("Введите текст для шифровки:")
+            val plaintext = readLine()?.toUpperCase()
+
+            val ciphertext = encrypt(plaintext, alphabet, shifts)
+            println("Зашифрованный текст: $ciphertext")
+        }
+        2 -> {
+            println("Введите текст для расшифровки:")
+            val ciphertext = readLine()?.toUpperCase()
+
+            val plaintext = decrypt(ciphertext, alphabet, shifts)
+            println("Расшифрованный текст: $plaintext")
+        }
+        else -> println("Некорректный выбор")
+    }
+}
+
+fun encrypt(plaintext: String?, alphabet: List<Char>, shifts: List<Int>): String {
+    if (plaintext == null) return ""
+
+    val encryptedText = StringBuilder()
+    for (char in plaintext) {
+        if (char in alphabet) {
+            val index = alphabet.indexOf(char)
+            val shiftedIndex = (index + shifts[index] - 1) % alphabet.size
+            encryptedText.append(alphabet[shiftedIndex])
+        } else {
+            encryptedText.append(char)
+        }
+    }
+    return encryptedText.toString()
+}
+
+fun decrypt(ciphertext: String?, alphabet: List<Char>, shifts: List<Int>): String {
+    if (ciphertext == null) return ""
+
+    val decryptedText = StringBuilder()
+    for (char in ciphertext) {
+        if (char in alphabet) {
+            val index = alphabet.indexOf(char)
+            val shiftedIndex = (index - shifts[index] + alphabet.size) % alphabet.size
+            decryptedText.append(alphabet[shiftedIndex])
+        } else {
+            decryptedText.append(char)
+        }
+    }
+    return decryptedText.toString()
+}
